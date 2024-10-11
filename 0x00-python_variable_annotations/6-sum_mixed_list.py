@@ -2,13 +2,9 @@
 """
 This module provides a function to sum a list of floats.
 """
+from typing import List, Union
 
-from typing import List
+def sum_mixed_list(mxd_lst: List[Union[int, float]]) -> float:
 
-def sum_list(input_list: List[float]) -> float:
-
-    """
-    Sums a list of floats and returns the sum
-    """
-    return sum(input_list)
-
+        """Function that takes a list of integers and floats and returns their sum as a float."""
+    return float(sum(mxd_lst))
