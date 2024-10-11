@@ -2,7 +2,7 @@
 """
 This module contains Complex types - functions
 """
-from collections.abc import Callable
+from typing import Callable
 def make_multiplier(multiplier:float)->Callable[[float],float]:
     """
     Returns a functions that multiplier a float by multiplier
