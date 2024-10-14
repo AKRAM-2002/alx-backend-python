@@ -3,10 +3,11 @@
 Task-based implementation of wait_n using task_wait_random
 """
 import asyncio
+from typing import List
 task_wait_random = __import__('3-tasks').task_wait_random
 
 
-async def task_wait_n(n: int, max_delay: int):
+async def task_wait_n(n: int, max_delay: int) -> List[float]:
     """
     Spawn task_wait_random n times with the specified max_delay,
     and return the list of all the delays (float values) in
@@ -19,23 +20,7 @@ async def task_wait_n(n: int, max_delay: int):
     Returns:
         List[float]: List of delays in ascending order
     """
-    # Create a list of asyncio tasks
-    tasks = [task_wait_random(max_delay) for _ in range(n)]
-
-    # Await all the tasks and get the results
-    delays = await asyncio.gather(*tasks)
-
-    # Insertion sort the delays
-    sorted_delays = []
-    for delay in delays:
-        if not sorted_delays:
-            sorted_delays.append(delay)
-        else:
-            for i in range(len(sorted_delays)):
-                if delay < sorted_delays[i]:
-                    sorted_delays.insert(i, delay)
-                    break
-            else:
-                sorted_delays.append(delay)
-
-    return sorted_delays
+    delays = await asyncio.gather(
+        *tuple(map(lambda _: task_wait_random(max_delay), range(n)))
+    )
+    return sorted(delays)
