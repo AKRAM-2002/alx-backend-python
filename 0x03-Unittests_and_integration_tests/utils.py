@@ -73,6 +73,3 @@ def memoize(fn: Callable) -> Callable:
         return getattr(self, attr_name)
 
     return property(memoized)
-
-if __name__ == '__main__':
-    print(get_json("https://api.github.com/orgs/google"))
