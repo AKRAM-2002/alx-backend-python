@@ -43,11 +43,12 @@ class TestGithubOrgClient(unittest.TestCase):
         """
         payload = [{"name": "repo1"}, {"name": "repo2"}]
         mock.return_value = payload
-        with patch('client.GithubOrgClient._public_repos_url', new_callable=PropertyMock) as mock_public:
+        with patch('client.GithubOrgClient._public_repos_url',
+            new_callable=PropertyMock) as mock_public:
 
-            mock_public.return_value = "World"
+            mock_public.return_value = "hello/world"
             test_class = GithubOrgClient('test')
-            result = test_class._public_repos()
+            result = test_class.public_repos()
 
             check = [i["name"] for i in payload]
             self.assertEqual(result, check)
