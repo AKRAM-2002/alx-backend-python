@@ -4,9 +4,11 @@
 """
 from utils import access_nested_map, get_json, memoize
 import unittest
-from parameterized import parameterized
+from parameterized import parameterized, parameterized_class
 from unittest.mock import patch, Mock, PropertyMock
 from client import GithubOrgClient
+from fixtures import TEST_PAYLOAD
+import json 
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -66,3 +68,28 @@ class TestGithubOrgClient(unittest.TestCase):
         test_class = GithubOrgClient('test')
         result = test_class.has_license(repo, license)
         self.assertEqual(result, expected_result)
+
+
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
+class TestIntegrationGithubOrgClient(unittest.TestCase):
+    """ Test class for integration tests of GithubOrgClient """
+    
+    @classmethod
+    def setUpClass(cls):
+        """ Setup method for integration tests """
+        config = {'return_value.json.side_effect':
+                    [
+                        cls.org_payload, cls.repos_payload,
+                        cls.org_payload, cls.repos_payload
+                    ]
+                }
+        cls.get_patcher = patch('requests.get', **config)
+        cls.mock = cls.get_patcher.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        """A class method called after tests in an individual class have run"""
+        cls.get_patcher.stop() 
